@@ -15,7 +15,7 @@ import com.example.mycredit.database.DBHelper;
 public class SignUpActivity extends AppCompatActivity {
 
     private EditText emailSignUp , usernameSignUp , passwordSignUp;
-    private Button signUpButton;
+    private Button signUpButton, btn;
     private DBHelper myDB;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,23 +28,32 @@ public class SignUpActivity extends AppCompatActivity {
         passwordSignUp = findViewById(R.id.siguppassword);
 
         signUpButton = findViewById(R.id.signupbutton);
+        btn = findViewById(R.id.signupbutton);
 
         myDB = new DBHelper(this);
-        insertUser();
-    }
+        btn.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            String getEmail = emailSignUp.getText().toString();
+            String getUsername = usernameSignUp.getText().toString();
+            String getPassword = passwordSignUp.getText().toString();
 
-    private void insertUser(){
-        signUpButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                boolean var = myDB.registerUser(usernameSignUp.getText().toString() , emailSignUp.getText().toString() , passwordSignUp.getText().toString());
-                if(var){
+            //Validation
+            if (getUsername.isEmpty()) {
+                usernameSignUp.setError("Please Fill Your Username");
+            } else if (getEmail.isEmpty()) {
+                emailSignUp.setError("Please Fill Your Email");
+            } else if (getPassword.isEmpty()) {
+                passwordSignUp.setError("Please Fill Your Password");
+            } else {
+                boolean var = myDB.registerUser(getUsername, getEmail, getPassword);
+                if (var) {
                     Toast.makeText(SignUpActivity.this, "User Registered Successfully !!", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(SignUpActivity.this, LoginActivity.class));
-                }
-                else
+                } else
                     Toast.makeText(SignUpActivity.this, "Registration Error !!", Toast.LENGTH_SHORT).show();
             }
-        });
+        }
+    });
     }
 }
