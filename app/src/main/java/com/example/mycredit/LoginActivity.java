@@ -36,13 +36,22 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                boolean var = myDB.checkUser(loginUsername.getText().toString(), loginPass.getText().toString());
-                if (var){
-                    Toast.makeText(LoginActivity.this, "Login Successfully", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                    finish();
-                }else {
-                    Toast.makeText(LoginActivity.this, "Login Failed", Toast.LENGTH_SHORT).show();
+               String getUsername = loginUsername.getText().toString();
+               String getPass = loginPass.getText().toString();
+
+                if (getUsername.isEmpty()) {
+                    loginUsername.setError("Please Fill Your Username");
+                } else if (getPass.isEmpty()) {
+                    loginPass.setError("Please Fill Your Password");
+                } else {
+                    boolean var = myDB.checkUser(getUsername , getPass);
+                    if (var) {
+                        Toast.makeText(LoginActivity.this, "Login Successfully", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        finish();
+                    } else {
+                        Toast.makeText(LoginActivity.this, "Login Failed", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
